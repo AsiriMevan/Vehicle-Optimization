@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Welcome to MyShop</h1>
+<p>This is the best shop to get goods.</p>
+
+<div class="row">
+
+    {% for product in products %}
+
+    <div class="col-md-4 card card-body p-3 m-2">
+
+        <h2>{{product.name}}</h2>
+        <p>{{product.description}}</p>
+        <p>{{product.price}}</p>
+        <p>{{product.sale}}</p>
+        <p>{{product.created_at}}</p>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+{% endblock %}
+
+</div>

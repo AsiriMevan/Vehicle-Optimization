@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container" id="vehicletbl">
+    <table class="vehicleScheduleTbl" id="tablefunctions">
+        <thead>
+            <th><input type="checkbox" id="checkall"></th>
+            <th>Vehicle ID</th>
+            <th>Vehicle Brand</th>
+            <th>Vehicle Number</th>
+            <th>Vehicle Type</th>
+            <th>Scheduled Date</th>
+            <th>Scheduled Location</th>
+            <th>Designated Driver</th>
+            <th>Warehouse</th>
+            <th>Capacity</th>
+            <th>Status</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </thead>
+        <tbody>
+            {% for vehicle in vehicles %}
+                <tr>
+                    <td><input type="checkbox" id="checkthis"></td>
+                    <td>{{ vehicle.vehicle_Id }}</td>
+                    <td>{{ vehicle.vehicle_Brand }}</td>
+                    <td>{{ vehicle.vehicle_Number }}</td>
+                    <td>{{ vehicle.vehicle_Type }}</td>
+                    <td>{{ vehicle.scheduled_Date }}</td>
+                    <td>{{ vehicle.scheduled_Location }}</td>
+                    <td>{{ vehicle.designated_Driver }}</td>
+                    <td>{{ vehicle.warehouse }}</td>
+                    <td>{{ vehicle.capacity }}</td>
+                    <td>{{ vehicle.status }}</td>
+                    <td><a class="btn btn-sm btn-info" href="{% url 'vehicleUpdate' vehicle.vehicle_Id %}">Update</a></td>
+                    <td><a class="btn btn-sm btn-danger" href="{% url 'vehicleDelete' vehicle.vehicle_Id %}">Delete</a></td>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

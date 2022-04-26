@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<title>Fleet Optimization</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="">
+{% load static %}
+<style>
+   
+    @font-face {
+        font-family: SF-Pro-Display-Bold;
+        src: url("{% static 'fonts/SF-Pro-Display-Bold.otf' %}");
+    }
+
+    @font-face {
+        font-family: SF-Pro-Display-Bold;
+        src: url("{% static 'fontsSF-Pro-Display-Bold.otf' %}");
+    }
+
+    @font-face {
+        font-family: SF-Pro-Display-Regular;
+        src: url("{% static 'fontsSF-Pro-Display-Regular.otf' %}");
+    }
+
+    @font-face {
+        font-family: SF-Pro-Display-Medium;
+        src: url("{% static 'fontsSF-Pro-Display-Medium.otf' %}");
+    }
+
+    @font-face {
+        font-family: SF-Pro-Display-Black;
+        src: url("{% static 'fonts/SF-Pro-Display-Black.otf' %}");
+    }
+
+    #map {
+        height: 100%;
+        z-index: 1;
+    }
+
+    html,
+    body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    .base-card {
+        position: absolute;
+        margin: 20px;
+        padding: 30px;
+        z-index: 2;
+
+        /* right: 959px;
+    top: calc(50% - 509px/2 - 219.5px); */
+        background: #ffffff;
+        box-shadow: 0px 8px 40px rgba(0, 0, 0, 0.25);
+        border-radius: 22px;
+        z-index: 2;
+    }
+
+    #main-card {
+        width: 230px;
+        /* height: 300px; */
+    }
+
+    .card-tile {
+        font-size:1.7em;
+        font-family: SF-Pro-Display-Black, sans-serif;
+        margin-bottom: 0.4em;
+    }
+
+    .card-desc{
+        font-size: 0.75em;
+        color:rgb(170, 170, 170);
+        margin-bottom: 1em;
+        font-family: SF-Pro-Display-Regular, sans-serif;
+    }
+
+    #options-container{
+        /* position: absolute; */
+        display: flex;
+        /* flex-direction: row; */
+        justify-content: space-between;
+        
+        /* align-items: space-between; */
+        width: 100%;
+    }
+
+    .option{
+        width: 80px;
+        height: 80px;
+        /* display: inline-block; */
+        background: #ffffff;
+        box-shadow: 0px 7px 20px rgba(0, 0, 0, 0.09);
+        border-radius: 22%;
+        z-index:3;
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+        padding: 15px;
+        font-family: SF-Pro-Display-Bold, sans-serif;
+        font-size: 0.85em;
+    }
+
+    #optimize-btn{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 50px;
+        background: #007AFF;
+        border-radius: 22px;
+        margin-top: 2em;
+        font-family: SF-Pro-Display-Regular, sans-serif;
+        color: white;
+        bottom: 0;
+        text-align: center;
+        padding: auto;
+    }
+
+    /* .option-text{
+        top: auto;
+        bottom: 0;
+    } edited -Randike
+    Bodies*/
+    .option-icon{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: auto;
+        font-size: 1.5rem;
+        color: #ffffff;
+        margin-right: 0px;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color:tomato;
+    }
+
+
+</style>
+
+
+<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyApaPtekhhx0hjucJe5NmHg0pocJE0NQx4&callback=initMap"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+{% load static %}
+<script src="{% static 'js/mapdata.js'  %}"></script>
+
+<!-- Font Awesome CDN -->
+<script src="https://kit.fontawesome.com/6f0776b32e.js" crossorigin="anonymous"></script>
+<body>
+
+    
+    <div class="base-card" id="main-card">
+        <div class="card-tile">Plan Delivery</div>
+        <div class="card-desc">Select delivery destinations and and then optimize routes to allocate units to each route. You may scedule trips afterwards</div>
+        <div id = "options-container">
+            <div class = "option">
+                <div class = "option-icon" id ="dest-icon"><i class="fas fa-map-marker-alt"></i></div>
+                <div class = "option-text">Select Destinations</div>
+            </div>
+            <div class = "option">
+                <div class = "option-icon" id = "schedule-icon"><i class="fas fa-clock"></i></div>
+                <div class = "option-text">Schedule Trips</div>
+            </div>
+        </div>
+        <div id ="optimize-btn"><span class="btn-txt">Optimize</span></div>
+    </div>
+    <div id="map"></div>
+</body>
+
+</html>

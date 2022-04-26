@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Wialon Playground - Geofence parameters</title>
+    {% load static %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script> -->
+    <!-- <script type="text/javascript" src="//code.jquery.com/jquery-latest.min.js"></script> -->
+    <script type="text/javascript" src="//hst-api.wialon.com/wsdk/script/wialon.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script src="{% static 'js/chkpointdetails.js'  %}"></script>
+    <style>
+        #map {
+            height: 100%;
+        }
+
+        /* Optional: Makes the sample page fill the window. */
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #floating-panel {
+            position: absolute;
+            top: 10px;
+            margin-left: 10px;
+            margin-top: 50px;
+            z-index: 5;
+            background-color: #fff;
+            padding-left: 10px;
+            border: 1px solid #999;
+            text-align: center;
+            font-family: "Roboto", "sans-serif";
+            line-height: 30px;
+            padding-left: 10px;
+            border-radius: 20px;
+            height: auto;
+            width: 300px;
+        }
+    </style>
+    <script>
+        function initMap(zones) {
+            var zones = '{{client | safe}}';
+            var zone = JSON.parse(zones);
+            var ware = '{{warehouse | safe}}';
+            var house = JSON.parse(ware);
+
+            const directionsService = new google.maps.DirectionsService();
+            const directionsRenderer = new google.maps.DirectionsRenderer();
+            const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 7,
+                center: { lat: 6.882547, lng: 79.888866 },
+            });
+            var infowindow = new google.maps.InfoWindow();
+            var marker, i;
+
+            addMarkers(zone,"{% static 'images/client.png'  %}");
+            addMarkers(house,"{% static 'images/Warehouse_4.png'  %}");
+            
+            function addMarkers(data,link) {
+                for (var i in data) {
+                    console.log(data[i].n)
+                    marker = new google.maps.Marker({
+                        position: new google.maps.LatLng(data[i].b.cen_y, data[i].b.cen_x),
+                        map: map,
+                        icon: link,
+                    });
+
+                    google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                        return function () {
+                            infowindow.setContent('Name : ' + data[i].n + '<br />' + 'ID : ' + data[i].id + '<br />' + 'Address : ' + data[i].d);
+                            infowindow.open(map, marker);
+                        }
+                    })(marker, i));
+                }
+            }
+        }
+
+        function initMap2(n, lat, lon) {
+            const directionsService = new google.maps.DirectionsService();
+            const directionsRenderer = new google.maps.DirectionsRenderer();
+            const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 7,
+                center: { lat: 6.882547, lng: 79.888866 },
+            });
+
+
+            var marker = new google.maps.Marker({
+                position: new google.maps.LatLng(lat, lon),
+                icon: "{% static 'images/Warehouse_4.png'  %}",
+                label: { color: 'black', fontWeight: 'bold', fontSize: '14px', text: n }
+            });
+            marker.setMap(map);
+
+            // directionsRenderer.setMap(map);
+            // document.getElementById("submit").addEventListener("click", () => {
+            //     calculateAndDisplayRoute(directionsService, directionsRenderer);
+            // });
+        }
+        function initMap3() {
+            const directionsService = new google.maps.DirectionsService();
+            const directionsRenderer = new google.maps.DirectionsRenderer();
+            const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 7,
+                center: { lat: 6.882547, lng: 79.888866 },
+            });
+
+
+            // var marker = new google.maps.Marker({
+            //     position: new google.maps.LatLng(lat, lon),
+            //     icon: "{% static 'images/Warehouse_4.png'  %}",
+            //     label: { color: 'black', fontWeight: 'bold', fontSize: '14px', text: n }
+            // });
+            // marker.setMap(map);
+            directionsRenderer.setMap(map);
+            document.getElementById("submit").addEventListener("click", () => {
+                calculateAndDisplayRoute(directionsService, directionsRenderer);
+            });
+        }
+
+        function calculateAndDisplayRoute(directionsService, directionsRenderer) {
+            const waypts = [];
+            //  const checkboxArray = document.getElementById("waypoints");
+
+            // for (let i = 0; i < checkboxArray.length; i++) {
+            //     if (checkboxArray.options[i].selected) {
+            //         waypts.push({
+            //             location: checkboxArray[i].value,
+            //             stopover: true,
+            //         });
+            //     }
+            // }
+
+            directionsService
+                .route({
+                    origin: document.getElementById("start").value,
+                    destination: document.getElementById("end").value,
+                    //     waypoints: waypts,
+                    optimizeWaypoints: true,
+                    travelMode: google.maps.TravelMode.DRIVING,
+                })
+                .then((response) => {
+                    directionsRenderer.setDirections(response);
+
+                    const route = response.routes[0];
+                    const summaryPanel = document.getElementById("directions-panel");
+
+                    summaryPanel.innerHTML = "";
+
+                    // For each route, display summary information.
+                    for (let i = 0; i < route.legs.length; i++) {
+                        const routeSegment = i + 1;
+
+                        summaryPanel.innerHTML +=
+                            "<b>Route Segment: " + routeSegment + "</b><br>";
+                        summaryPanel.innerHTML += route.legs[i].start_address + " to ";
+                        summaryPanel.innerHTML += route.legs[i].end_address + "<br>";
+                        summaryPanel.innerHTML += route.legs[i].distance.text + "<br><br>";
+                    }
+                })
+                .catch((e) => console.log());
+        }
+
+    </script>
+</head>
+
+<body>
+    <div id="floating-panel">
+        Resources: <select id="res">
+            <option></option>
+        </select>
+        <input type="button" value="See All" onclick="init()">
+        <br>
+        Select geofence:<select id="zones">
+            <option></option>
+        </select>
+        <br>
+        To:<select id="zones1">
+            <option></option>
+        </select>
+        <div id="log"></div>
+        <input type="button" onclick="initMap3()" value="Submit" id="submit">
+    </div>
+    <div id="map"></div>
+    <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyApaPtekhhx0hjucJe5NmHg0pocJE0NQx4&callback=initMap&v=weekly"
+        async></script>
+</body>
+
+</html>

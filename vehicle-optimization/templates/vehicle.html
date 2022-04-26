@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<form action="" method="POST">
+
+    {% csrf_token %}
+    <table>
+        {{ form.as_p}}
+    </table>
+    <input type="submit" value="Add">
+
+</form>
+
+<!-- <section id="VehicaleModule">
+    <div class="container" id="VehicleContainer">
+        <h2>Vehical Module</h2>
+        <div class="row100">
+            <div class="col">
+                <div class="inputBox">
+                    <input type="text" name="" required="required">
+                    <span class="text">Vehicle ID :</span>
+                    <span class="line"></span>
+                </div>
+            </div>
+            <div class="col">
+                <div class="inputBox">
+                    <input type="text" name="" required="required">
+                    <span class="text">Vehicle Brand :</span>
+                    <span class="line"></span>
+                </div>
+            </div>
+            <div class="col">
+                <div class="inputBox">
+                    <input type="text" name="" required="required">
+                    <span class="text">Vehicle Number :</span>
+                    <span class="line"></span>
+                </div>
+            </div>
+            <div class="col">
+                <div class="inputBox">
+                    <input type="text" name="" required="required">
+                    <span class="text">Vehicle Type :</span>
+                    <span class="line"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row100">
+            <div class="col">
+                <div class="inputBox textarea">
+                    <textarea name="" id="" cols="30" rows="10" required="required"></textarea>
+                    <span class="text">Vehicle Description :</span>
+                    <span class="line" id=></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row100">
+            <div class="col">
+                <input type="Submit" value="Add">
+            </div>
+        </div>
+    </div>
+</section> -->
+
+{% endblock %}
